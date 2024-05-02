@@ -1,11 +1,11 @@
 FROM amd64/debian:bookworm-slim AS build
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends tar wget m4 make build-essential autoconf automake pkg-config git libtool libomp-dev liblzma-dev \
+    && apt-get install -y --no-install-recommends ca-certificates tar wget m4 make build-essential autoconf automake pkg-config git libtool libomp-dev liblzma-dev \
     && apt-get clean
 
 WORKDIR /app
-RUN wget -q --no-check-certificate https://github.com/kspalaiologos/qbdiff/archive/refs/tags/1.0.0.tar.gz \
+RUN wget -q https://github.com/kspalaiologos/qbdiff/archive/refs/tags/1.0.0.tar.gz \
     && tar xvfz 1.0.0.tar.gz
 
 WORKDIR /app/qbdiff-1.0.0
