@@ -1,8 +1,19 @@
 FROM amd64/debian:bookworm-slim AS build
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates tar wget m4 make build-essential autoconf automake pkg-config git libtool libomp-dev liblzma-dev \
-    && apt-get clean
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \
+    autoconf \
+    automake \
+    build-essential \
+    git \
+    liblzma-dev \
+    libomp-dev \
+    libtool \
+    m4 \
+    make \
+    pkg-config \
+    tar \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 RUN wget -q https://github.com/kspalaiologos/qbdiff/archive/refs/tags/1.0.0.tar.gz \
@@ -18,9 +29,8 @@ RUN echo '1.0.0' > .tarball-version \
 
 FROM amd64/debian:bookworm-slim
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends libgomp1 \
-    && apt-get clean
+RUN apt-get update && apt-get install -y --no-install-recommends libgomp1=12.* \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /app/qbdiff-1.0.0/qbdiff /app/qbdiff
 COPY --from=build /app/qbdiff-1.0.0/qbpatch /app/qbpatch
